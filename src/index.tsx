@@ -1,3 +1,4 @@
+import { GalleryPage } from '@/views/gallery-page/GalleryPage';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.scss';
@@ -8,7 +9,7 @@ const root = createRoot(container);
 const App = () => {
 
   return (
-    <>First commit</>
+    <GalleryPage />
   );
 };
 

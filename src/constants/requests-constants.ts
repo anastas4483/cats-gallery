@@ -1,0 +1,1 @@
+export const requestsPageSize = 10;
