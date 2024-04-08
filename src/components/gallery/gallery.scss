@@ -1,0 +1,48 @@
+$gallery-width: 800px;
+$action-button-size: 30px;
+$action-button-extra-size-on-hover: 10px;
+$action-button-padding: 5px;
+
+.gallery {
+  position: relative;
+
+  &-images-container {
+    display: flex;
+    gap: 50px;
+    flex-wrap: nowrap;
+    width: $gallery-width;
+    overflow: hidden;
+    padding: 0 50px;
+  }
+
+  &-action-button {
+    position: absolute;
+    top: calc(50% - #{$action-button-size} - #{$action-button-padding});
+    font-size: $action-button-size;
+    user-select: none;
+    cursor: pointer;
+    transition: all ease 0.1s;
+    color: #898989;
+    padding: $action-button-padding;
+
+    &:hover {
+      font-size: calc($action-button-size + $action-button-extra-size-on-hover);
+      top: calc(50% - #{$action-button-size} - (#{$action-button-extra-size-on-hover} /2) - #{$action-button-padding});
+      color: #393939;
+    }
+
+    &:active {
+      color: #12b086;
+    }
+
+    &.back {
+      left: 0;
+    }
+
+    &.next {
+      left: $gallery-width;
+    }
+
+  }
+
+}

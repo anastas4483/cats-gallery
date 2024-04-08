@@ -35,12 +35,14 @@ export const GalleryPage = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <Header />
-      <Gallery
-        data={catImages}
-        getNextData={getNewPageImages}
-      />
-    </div>
+      <div className="gallery-page-content">
+        <Gallery
+          data={catImages}
+          getNextData={getNewPageImages}
+        />
+      </div>
+    </>
   );
 };
