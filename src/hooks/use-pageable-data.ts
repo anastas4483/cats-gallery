@@ -7,31 +7,34 @@ interface PageableDataHookParams<T> {
 
 export const usePageableData = <T>({ request }: PageableDataHookParams<T>) => {
   const [pageNumber, setPageNumber] = useState(0);
+  const [data, setData] = useState<T>([]);
 
   const increasePageNumber = () => setPageNumber(prev => prev + 1);
 
   const loadFirstPage = async () => {
-    return request(0)
+    request(0)
       .then((res) => {
         increasePageNumber();
-        return res.data;
+        setData(prev => [...prev, ...res.data]);
       });
   };
 
   const loadNextPage = () => {
-    return request(pageNumber)
+    request(pageNumber)
       .then((res) => {
         increasePageNumber();
-        return res.data;
+        setData(prev => [...prev, ...res.data]);
       });
   };
 
   const resetPagination = () => {
+    setData([]);
     loadFirstPage();
     setPageNumber(0);
   };
 
   return {
+    data,
     loadFirstPage,
     loadNextPage,
     resetPagination

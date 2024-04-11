@@ -3,35 +3,36 @@ import { Gallery } from '@/components/gallery/Gallery';
 import { Header } from '@/components/header/Header';
 import { usePageableData } from '@/hooks/use-pageable-data';
 import { CatImage } from '@/models/cat-image';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import './gallery-page.scss';
 
 export const GalleryPage = () => {
 
-  const [catImages, setCatImages] = useState<string[]>([]);
-
-  const { loadFirstPage, loadNextPage } = usePageableData({ request: getCatImagesRequest });
+  const {
+    data: images,
+    loadFirstPage,
+    loadNextPage,
+    resetPagination
+  } = usePageableData({ request: getCatImagesRequest });
 
   const getCatImagesUrls = (images: CatImage[]) =>
     images.map((image) => image.url);
 
+  const imagesSrc = useMemo(() => getCatImagesUrls(images), [images.length]);
+
   const getNewPageImages = useCallback(() => {
-    if (!catImages.length) {
-      loadFirstPage()
-        .then((res) => setCatImages(getCatImagesUrls(res)));
+    if (!imagesSrc.length) {
+      loadFirstPage();
       return;
     }
 
-    loadNextPage()
-      .then((res) => setCatImages(getCatImagesUrls(res)));
-  }, [catImages]);
-
-  const resetCatImages = () => setCatImages([]);
+    loadNextPage();
+  }, [imagesSrc.length]);
 
   useEffect(() => {
     getNewPageImages();
 
-    return resetCatImages;
+    return resetPagination;
   }, []);
 
   return (
@@ -39,7 +40,7 @@ export const GalleryPage = () => {
       <Header />
       <div className="gallery-page-content">
         <Gallery
-          data={catImages}
+          data={imagesSrc}
           getNextData={getNewPageImages}
         />
       </div>

@@ -5,14 +5,22 @@ $action-button-padding: 5px;
 
 .gallery {
   position: relative;
+  width: $gallery-width;
+  overflow: hidden;
 
   &-images-container {
+    position: relative;
     display: flex;
     gap: 50px;
     flex-wrap: nowrap;
-    width: $gallery-width;
-    overflow: hidden;
     padding: 0 50px;
+    z-index: 0;
+    user-select: none;
+    transition: all ease 0.2s;
+
+    .gallery-image {
+      height: auto;
+    }
   }
 
   &-action-button {
@@ -24,6 +32,7 @@ $action-button-padding: 5px;
     transition: all ease 0.1s;
     color: #898989;
     padding: $action-button-padding;
+    z-index: 1;
 
     &:hover {
       font-size: calc($action-button-size + $action-button-extra-size-on-hover);
@@ -40,7 +49,7 @@ $action-button-padding: 5px;
     }
 
     &.next {
-      left: $gallery-width;
+      right: 0;
     }
 
   }
