@@ -9,6 +9,12 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "sourceMap": true,
+    "lib": [
+      "es2019",
+      "es6",
+      "dom",
+      "webworker"
+    ],
     /* Linting */
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
@@ -21,7 +27,8 @@
   },
   "include": [
     "src",
-    "vite-env-override.d.ts"
+    "vite-env-override.d.ts",
+    "sw.ts"
   ],
   "references": [
     {
