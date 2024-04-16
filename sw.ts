@@ -10,7 +10,7 @@ self.addEventListener("install", function (event) {
   console.log('installed');
   event.waitUntil(
     caches.open(version + cacheName).then(function (cache) {
-      return cache.addAll(["/index.html", "/offline.html", '/index.tsx']);
+      return cache.addAll(["/index.html", "/offline.html"]);
     })
   );
 });
@@ -32,27 +32,27 @@ self.addEventListener('activate', (event) => {
 
 // Обработка запросов
 self.addEventListener("fetch", function (event) {
-  console.log('in fetch event');
   event.respondWith(
-    // Делаем запрос на бек
-    fetch(event.request)
-      // Если успешно выполнился, сохраняем данные и возвращаем результат
-      .then((fetchedResponse) => {
-        const responcseCopy = fetchedResponse.clone();
-        caches.open(version + cacheName).then(cache => cache.put(event.request, responcseCopy));
-        return fetchedResponse;
-      })
+    caches.match(event.request).then(function (response) {
+      // Возвращаем кэшированный ответ, если он есть
+      if (response) {
+        return response;
+      }
 
-      // Если интернета нет, идем в кеш и берем оттуда даные
-      .catch((err) =>
-        caches.match(event.request).then((foundCaches) => {
-          if (foundCaches) {
-            return foundCaches;
-          }
-
-          // Если в кеше нет данных такого запроса, возвращаем заглушку
-          return caches.match('/offline.html');
+      // В противном случае выполняем запрос к сети
+      return fetch(event.request)
+        .then(function (response) {
+          // Ответ от сети закешируем для будущего использования
+          let responseClone = response.clone();
+          caches.open(version + cacheName).then(function (cache) {
+            cache.put(event.request, responseClone);
+          });
+          return response;
         })
-      )
+        .catch(function () {
+          // В случае ошибки сети (fetch), показываем страницу offline.html
+          return caches.match('/offline.html');
+        });
+    })
   );
 });
